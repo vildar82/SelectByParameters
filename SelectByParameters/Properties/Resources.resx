@@ -120,4 +120,16 @@
   <data name="ContextMenu" xml:space="preserve">
     <value>Select by params</value>
   </data>
+  <data name="FromSelected" xml:space="preserve">
+    <value>From selected</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="CommonGroupName" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="PropLayerName" xml:space="preserve">
+    <value>Layer</value>
+  </data>
 </root>

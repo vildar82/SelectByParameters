@@ -8,6 +8,9 @@ namespace SelectByParameters
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Runtime;
     using Autodesk.AutoCAD.Windows;
+    using Data;
+    using Providers;
+    using UI;
 
     public static class ContextMenu
     {
@@ -22,33 +25,36 @@ namespace SelectByParameters
 
         private static void Click(object sender, EventArgs e)
         {
-            var doc = AcadHelper.Doc;
-            var sel = doc.Editor.SelectImplied();
-            if (sel.Status != PromptStatus.OK) return;
-            using (var t = doc.TransactionManager.StartTransaction())
+            try
             {
-                var parameters = sel.Value.GetObjectIds().GetObjects<Entity>().GroupBy(g => g.GetType())
-                    .OrderBy(o => o.Key.Name).Select(GetTypeParams).Where(w => w != null);
-                t.Commit();
+                var doc = AcadHelper.Doc;
+                var db = doc.Database;
+                var sel = doc.Editor.SelectImplied();
+                if (sel.Status != PromptStatus.OK) return;
+                List<GroupVm> groups;
+                using (var t = doc.TransactionManager.StartTransaction())
+                {
+                    var ents = sel.Value.GetObjectIds().GetObjects<Entity>().ToList();
+                    var commonGroup = new CommonProvider(ents, db, new Options()).GetGroup();
+                    groups = ents.GroupBy(g => g.GetType())
+                        .Select(GetTypeParams).Where(w => w != null).OrderBy(o => o.Group.Name).ToList();
+                    groups.Insert(0, commonGroup);
+                    t.Commit();
+                }
+
+                var selVm = new SelectVm(groups);
+                var selView = new SelectView(selVm);
+                Application.ShowModelessWindow(selView);
+            }
+            catch (System.Exception ex)
+            {
+                ex.Message.WriteLine();
             }
         }
 
-        private static Group GetTypeParams(IGrouping<Type, Entity> entities)
+        private static GroupVm GetTypeParams(IGrouping<Type, Entity> entities)
         {
-            throw new NotImplementedException();
+            return null;
         }
-    }
-
-    public class Group
-    {
-        public string Name { get; set; }
-
-        public List<Parameter> Parameters { get; set; }
-    }
-
-    public class Parameter
-    {
-        public string Name { get; set; }
-        public object Value { get; set; }
     }
 }

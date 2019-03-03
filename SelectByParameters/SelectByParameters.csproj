@@ -11,6 +11,7 @@
     <AssemblyName>SelectByParameters</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <LangVersion>8</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -46,10 +47,16 @@
       <HintPath>..\..\..\ObjectARX\ObjectARX2015\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,21 +65,61 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="source\AcadHelper.cs" />
+    <Compile Include="Properties\Resources.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="source\App.cs" />
     <Compile Include="source\ContextMenu.cs" />
+    <Compile Include="source\Data\Group.cs" />
+    <Compile Include="source\Data\Options.cs" />
+    <Compile Include="source\Data\Parameter.cs" />
+    <Compile Include="source\Lib\AcadHelper.cs" />
+    <Compile Include="source\Lib\ActionUsage.cs" />
+    <Compile Include="source\Lib\BoolUsage.cs" />
+    <Compile Include="source\Lib\IO\LocalFileData.cs" />
+    <Compile Include="source\Lib\IO\Path.cs" />
+    <Compile Include="source\Lib\IO\SerializerXml.cs" />
+    <Compile Include="source\Lib\Mvvm\BaseViewModel.cs" />
+    <Compile Include="source\Lib\Mvvm\BaseWindow.cs" />
+    <Compile Include="source\Lib\Mvvm\RelayCommand.cs" />
+    <Compile Include="source\Model\SelectModel.cs" />
+    <Compile Include="source\Providers\CommonProvider.cs" />
+    <Compile Include="source\Providers\IGroupProvider.cs" />
+    <Compile Include="source\UI\GroupVm.cs" />
+    <Compile Include="source\UI\ParameterVm.cs" />
+    <Compile Include="source\UI\SelectedItem.cs" />
+    <Compile Include="source\UI\SelectView.xaml.cs">
+      <DependentUpon>SelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="source\UI\SelectVm.cs" />
+    <Compile Include="source\UI\Values\StringListVm.cs" />
+    <Compile Include="source\UI\Values\StrinListControl.xaml.cs">
+      <DependentUpon>StrinListControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru.resx" />
+    <EmbeddedResource Include="Properties\Resources.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+    <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="all" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="source\Lib\Styles.xaml" />
+    <Page Include="source\UI\SelectView.xaml" />
+    <Page Include="source\UI\Values\StrinListControl.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

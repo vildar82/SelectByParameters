@@ -120,4 +120,16 @@
   <data name="ContextMenu" xml:space="preserve">
     <value>Выбор по параметрам</value>
   </data>
+  <data name="FromSelected" xml:space="preserve">
+    <value>Из выбранного</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="CommonGroupName" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="PropLayerName" xml:space="preserve">
+    <value>Слой</value>
+  </data>
 </root>

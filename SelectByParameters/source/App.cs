@@ -12,7 +12,6 @@ namespace SelectByParameters
 
         public void Terminate()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
