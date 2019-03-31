@@ -10,8 +10,10 @@ namespace SelectByParameters.Lib.Mvvm
 
         public BaseWindow(BaseViewModel vm)
         {
+            if (vm == null) return;
             vm.Window = this;
             DataContext = vm;
+            Closed += (o, e) => vm.OnClosed();
         }
     }
 }

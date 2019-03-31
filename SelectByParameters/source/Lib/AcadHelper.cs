@@ -270,5 +270,18 @@ namespace SelectByParameters
                 Thread.Sleep(delay2);
             }
         }
+
+        /// <summary>
+        /// Имя блока в том числе динамического.
+        /// Без условия открытой транзакции.
+        /// br.DynamicBlockTableRecord.Open(OpenMode.ForRead)
+        /// </summary>
+        public static string GetEffectiveName([NotNull] this BlockReference br)
+        {
+            using (var btrDyn = (BlockTableRecord)br.DynamicBlockTableRecord.Open(OpenMode.ForRead))
+            {
+                return btrDyn.Name;
+            }
+        }
     }
 }

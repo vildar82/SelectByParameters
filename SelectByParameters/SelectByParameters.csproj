@@ -9,10 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SelectByParameters</RootNamespace>
     <AssemblyName>SelectByParameters</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <LangVersion>8</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>c:\ProgramData\Autodesk\ApplicationPlugins\SelectByParams.Bundle\Contents\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>c:\ProgramData\Autodesk\ApplicationPlugins\SelectByParams.Bundle\Contents\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -72,11 +72,10 @@
     </Compile>
     <Compile Include="source\App.cs" />
     <Compile Include="source\ContextMenu.cs" />
-    <Compile Include="source\Data\Group.cs" />
-    <Compile Include="source\Data\Options.cs" />
-    <Compile Include="source\Data\Parameter.cs" />
+    <Compile Include="source\Data\DataCommon.cs" />
     <Compile Include="source\Lib\AcadHelper.cs" />
     <Compile Include="source\Lib\ActionUsage.cs" />
+    <Compile Include="source\Lib\Block\DictBlockName.cs" />
     <Compile Include="source\Lib\BoolUsage.cs" />
     <Compile Include="source\Lib\IO\LocalFileData.cs" />
     <Compile Include="source\Lib\IO\Path.cs" />
@@ -87,17 +86,11 @@
     <Compile Include="source\Model\SelectModel.cs" />
     <Compile Include="source\Providers\CommonProvider.cs" />
     <Compile Include="source\Providers\IGroupProvider.cs" />
-    <Compile Include="source\UI\GroupVm.cs" />
-    <Compile Include="source\UI\ParameterVm.cs" />
     <Compile Include="source\UI\SelectedItem.cs" />
     <Compile Include="source\UI\SelectView.xaml.cs">
       <DependentUpon>SelectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="source\UI\SelectVm.cs" />
-    <Compile Include="source\UI\Values\StringListVm.cs" />
-    <Compile Include="source\UI\Values\StrinListControl.xaml.cs">
-      <DependentUpon>StrinListControl.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -110,16 +103,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="all" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="all" />
-    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" />
-    <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" PrivateAssets="all" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
+    <PackageReference Include="Equals.Fody" Version="1.9.5" />
+    <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="all" ExcludeAssets="runtime;build" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="all" ExcludeAssets="runtime;build" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" ExcludeAssets="runtime;build" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.6.0" PrivateAssets="all" ExcludeAssets="runtime;build" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" ExcludeAssets="runtime;build" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="source\Lib\Styles.xaml" />
     <Page Include="source\UI\SelectView.xaml" />
-    <Page Include="source\UI\Values\StrinListControl.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -12,18 +12,18 @@
         where T : class, new()
     {
         private DateTime fileLastWrite;
-        public readonly string LocalFile;
+        private readonly string localFile;
 
         public LocalFileData([NotNull] string localFile)
         {
-            LocalFile = localFile;
+            this.localFile = localFile;
         }
 
         public T Data { get; set; }
 
         public bool HasChanges()
         {
-            return File.GetLastWriteTime(LocalFile) > fileLastWrite;
+            return File.GetLastWriteTime(localFile) > fileLastWrite;
         }
 
         /// <summary>
@@ -32,11 +32,13 @@
         public void Load()
         {
             Data = Deserialize();
-            fileLastWrite = File.GetLastWriteTime(LocalFile);
+            fileLastWrite = File.GetLastWriteTime(localFile);
         }
 
         public void Save()
         {
+            var dir = System.IO.Path.GetDirectoryName(localFile);
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             Serialize();
         }
 
@@ -86,14 +88,14 @@
 
         private T Deserialize()
         {
-            if (!File.Exists(LocalFile))
-                throw new FileNotFoundException(LocalFile);
-            return SerializerXml.Load<T>(LocalFile);
+            if (!File.Exists(localFile))
+                throw new FileNotFoundException(localFile);
+            return SerializerXml.Load<T>(localFile);
         }
 
         private void Serialize()
         {
-            SerializerXml.Save(LocalFile, Data);
+            SerializerXml.Save(localFile, Data);
         }
     }
 }

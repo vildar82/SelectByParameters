@@ -18,7 +18,7 @@ namespace SelectByParameters.Lib.IO
         public static LocalFileData<T> GetFileData<T>([NotNull] string plugin, [NotNull] string name)
             where T : class, new()
         {
-            return new LocalFileData<T>(GetUserDataFile(plugin, name));
+            return new LocalFileData<T>(GetUserDataFile(plugin, name + ".xml"));
         }
     }
 }

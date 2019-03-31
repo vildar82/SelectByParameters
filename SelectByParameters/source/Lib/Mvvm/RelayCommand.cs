@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SelectByParameters.Lib.Mvvm
@@ -33,6 +34,7 @@ namespace SelectByParameters.Lib.Mvvm
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 ex.Message.WriteLine();
             }
         }

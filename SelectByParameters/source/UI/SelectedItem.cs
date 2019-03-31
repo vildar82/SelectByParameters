@@ -1,10 +1,13 @@
 namespace SelectByParameters.UI
 {
-    using Autodesk.AutoCAD.DatabaseServices;
+	using Autodesk.AutoCAD.DatabaseServices;
 
-    public class SelectedItem
-    {
-        public string Name { get; set; }
-        public ObjectId Id { get; set; }
-    }
+	[Equals]
+	public class SelectedItem
+	{
+		[IgnoreDuringEquals]
+		public string Name { get; set; }
+
+		public ObjectId Id { get; set; }
+	}
 }

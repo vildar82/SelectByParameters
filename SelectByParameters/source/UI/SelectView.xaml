@@ -7,13 +7,22 @@
     xmlns:local="clr-namespace:SelectByParameters.UI"
     xmlns:mvvm="clr-namespace:SelectByParameters.Lib.Mvvm"
     xmlns:properties="clr-namespace:SelectByParameters.Properties"
+    xmlns:providers="clr-namespace:SelectByParameters.Providers"
     x:Name="Win"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance local:SelectVm}"
     Title="{x:Static properties:Resources.ContextMenu}" Height="450" Width="500">
+    <Window.Resources>
+        <ResourceDictionary Source="../Lib/Styles.xaml" />
+    </Window.Resources>
     <Grid>
         <Grid.Resources>
-            <ResourceDictionary Source="../Lib/Styles.xaml" />
+            <DataTemplate DataType="{x:Type providers:CommonProvider}">
+                <WrapPanel Margin="5" VerticalAlignment="Center">
+                    <CheckBox IsChecked="{Binding Data.Layer}" Content="{x:Static properties:Resources.PropLayerName}" Margin="1"
+                              VerticalAlignment="Center"/>
+                </WrapPanel>
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,43 +30,17 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <ItemsControl ItemsSource="{Binding Groups}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="local:GroupVm">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{Binding Group.Name}" Margin="10,1,1,1" />
-                            <ItemsControl Grid.Row="1" ItemsSource="{Binding Parameters}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-                                            <CheckBox Grid.Column="0" Content="{Binding Parameter.Name}" Margin="1"
-                                                      IsChecked="{Binding Parameter.IsSelected}"
-                                                      VerticalAlignment="Center" />
-                                            <ContentControl Grid.Column="1" Content="{Binding Control}" Margin="1" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ItemsControl ItemsSource="{Binding Groups}"/>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding SelIds}" SelectedItem="{Binding SelId}">
+        <ListBox Grid.Row="1" ItemsSource="{Binding SelItems}" SelectedItem="{Binding SelId}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="1" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBlock Grid.Row="1" Text="{Binding SelItems.Count}" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                   Margin="2,2,25,2" ToolTip="{Binding SelItems.Count}"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
             <Button Content="{x:Static properties:Resources.FromSelected}" Command="{Binding FromSelected}" Margin="5" MinWidth="60"/>
             <Button Content="{x:Static properties:Resources.SelectAll}" Command="{Binding SelectAll}" Margin="5" MinWidth="60"/>

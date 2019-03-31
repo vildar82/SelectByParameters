@@ -6,6 +6,7 @@ namespace SelectByParameters.UI
             : base(vm)
         {
             InitializeComponent();
+            Closed += (sender, args) => vm.OnClosed();
         }
     }
 }

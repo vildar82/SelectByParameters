@@ -32,5 +32,9 @@ namespace SelectByParameters.Lib.Mvvm
         {
             if (Window != null) Window.Visibility = Visibility.Visible;
         }
+
+        public virtual void OnClosed()
+        {
+        }
     }
 }

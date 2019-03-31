@@ -1,28 +1,35 @@
 namespace SelectByParameters.Model
 {
+    using Providers;
+    using JetBrains.Annotations;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Autodesk.AutoCAD.Runtime;
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
-    using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Internal;
+    using Lib.Block;
     using UI;
 
     public class SelectModel
     {
-        private readonly ObservableCollection<GroupVm> _groups;
+        private static RXObject blRefClass = RXObject.GetClass(typeof(BlockReference));
+        private readonly ObservableCollection<IGroupProvider> groups;
+        private readonly DictBlockName dictBlName;
+        private Dictionary<ObjectId, string> dictBlRefNames = new Dictionary<ObjectId, string>();
         private Document doc;
-        private GroupVm groupCommon;
 
-        public SelectModel(ObservableCollection<GroupVm> groups)
+        public SelectModel(ObservableCollection<IGroupProvider> groups, DictBlockName dictBlName)
         {
-            _groups = groups;
+            this.groups = groups;
+            this.dictBlName = dictBlName;
         }
 
         public List<SelectedItem> FromSelected(ObjectId[] ids)
         {
             doc = AcadHelper.Doc;
+            using (doc.LockDocument())
             using (var t = doc.TransactionManager.StartTransaction())
             {
                 var selIds = Select(ids);
@@ -43,33 +50,46 @@ namespace SelectByParameters.Model
             }
         }
 
-        private List<SelectedItem> Select(IEnumerable<ObjectId> ids)
+        private List<SelectedItem> Select([NotNull] IEnumerable<ObjectId> ids)
         {
-            groupCommon = _groups[0];
-            var selIds = ids.GetObjects<Entity>().Where(CommonFilter).Select(s => s.Id).ToArray();
+            if (!ids.Any()) return new List<SelectedItem>();
+            var selIds = new HashSet<ObjectId>();
+            foreach (var id in ids) selIds.Add(id);
+            var allItems = ids.GetObjects<Entity>().GroupBy(ContextMenu.GetType).ToDictionary(k => k.Key, v => v.ToList());
+            foreach (var @group in groups) group.Filter(allItems, e => selIds.Remove(e.Id));
             if (!selIds.Any())
             {
                 "Не найдено соответствий".WriteLine();
                 return null;
             }
 
-            doc.Editor.SetImpliedSelection(selIds);
-            Utils.SetFocusToDwgView();
-            return selIds.Select(GetSelItem).ToList();
-        }
-
-        private SelectedItem GetSelItem(ObjectId objectId)
-        {
-            return new SelectedItem
+            var selItems = selIds.Select(s => new SelectedItem
             {
-                Name = objectId.ObjectClass.Name,
-                Id = objectId
-            };
+                Name = GetEntityName(s),
+                Id = s
+            }).ToList();
+            doc.Editor.SetImpliedSelection(selItems.Select(s => s.Id).ToArray());
+            Utils.SetFocusToDwgView();
+            return selItems;
         }
 
-        private bool CommonFilter(Entity entity)
+        private string GetEntityName(ObjectId entId)
         {
-            return true;
+            return entId.ObjectClass == blRefClass ? GetBlRefName(entId) : entId.ObjectClass.DxfName;
+        }
+
+        private string GetBlRefName(ObjectId blRefId)
+        {
+            if (!dictBlRefNames.TryGetValue(blRefId, out var name))
+            {
+                using (var blRef = blRefId.Open(OpenMode.ForRead, false, true) as BlockReference)
+                {
+                    name = dictBlName.GetName(blRef);
+                    dictBlRefNames.Add(blRefId, name);
+                }
+            }
+
+            return name;
         }
     }
 }

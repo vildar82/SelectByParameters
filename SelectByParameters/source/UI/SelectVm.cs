@@ -1,31 +1,33 @@
-using System.ComponentModel;
+using SelectByParameters.Lib.Block;
 
 namespace SelectByParameters.UI
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Lib.Mvvm;
     using Model;
+    using Providers;
 
     public class SelectVm : BaseViewModel
     {
         private readonly SelectModel selModel;
 
-        public SelectVm(List<GroupVm> groups)
+        public SelectVm(List<IGroupProvider> groups, DictBlockName dictBlName)
         {
-            Groups = new ObservableCollection<GroupVm>(groups);
+            Groups = new ObservableCollection<IGroupProvider>(groups);
             FromSelected = new RelayCommand(FromSelectedExec);
             SelectAll = new RelayCommand(SelectAllExec);
-            selModel = new SelectModel(Groups);
+            selModel = new SelectModel(Groups, dictBlName);
             Show = new RelayCommand(ShowExec);
             PropertyChanged += PropChanges;
         }
 
-        public ObservableCollection<GroupVm> Groups { get; set; }
+        public ObservableCollection<IGroupProvider> Groups { get; set; }
 
-        public List<SelectedItem> SelIds { get; set; }
+        public List<SelectedItem> SelItems { get; set; }
 
         public RelayCommand FromSelected { get; set; }
 
@@ -44,13 +46,13 @@ namespace SelectByParameters.UI
                 doc.Editor.SetImpliedSelection(new ObjectId[] { });
                 var selRes = doc.Editor.GetSelection();
                 if (selRes.Status == PromptStatus.OK)
-                    SelIds = selModel.FromSelected(selRes.Value.GetObjectIds());
+                    SelItems = selModel.FromSelected(selRes.Value.GetObjectIds());
             }
         }
 
         private void SelectAllExec(object obj)
         {
-            SelIds = selModel.SelectAll();
+            SelItems = selModel.SelectAll();
         }
 
         private void ShowExec(object obj)
@@ -66,6 +68,14 @@ namespace SelectByParameters.UI
             if (e.PropertyName == nameof(SelId))
             {
                 ShowExec(SelId);
+            }
+        }
+
+        public override void OnClosed()
+        {
+            foreach (var group in Groups)
+            {
+                group.OnClosed();
             }
         }
     }
