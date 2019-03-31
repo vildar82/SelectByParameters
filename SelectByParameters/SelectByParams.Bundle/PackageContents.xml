@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<ApplicationPackage SchemaVersion="1.0" AppVersion="1.0" Author="Vildar" Name="SelectByParams" Description="Select entities by parameters of selected entities, start from context menu of selected entities." ProductCode="{B6991710-466B-4097-A103-7FD04ABDE57E}">
+	<CompanyDetails Name="Vily" Email="vildar82@gmail.com" />
+	<Components Description="SelectByParams">
+		<ComponentEntry AppName="AddinManager" ModuleName="./Contents/SelectByParameters.dll" LoadOnAutoCADStartup="True"/>					
+	</Components>
+</ApplicationPackage>
